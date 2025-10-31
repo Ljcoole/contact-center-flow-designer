@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Center Flow Art</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: #fafaf8;
+            color: #3e4c59;
+            margin: 0;
+            padding: 0;
+        }
+        .landing {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 20px;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(196,165,123,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(122,155,118,0.1) 0%, transparent 50%),
+                linear-gradient(180deg, #fafaf8 0%, #f5f5f0 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .landing::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(122,155,118,0.05) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+        }
+        .landing::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(196,165,123,0.05) 0%, transparent 70%);
+            bottom: -100px;
+            left: -100px;
+        }
+        .landing h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 72px;
+            font-weight: 400;
+            color: #3d5a3a;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            position: relative;
+            z-index: 1;
+        }
+        .landing .tagline {
+            font-size: 22px;
+            color: #6b7f68;
+            margin-bottom: 56px;
+            font-weight: 300;
+            max-width: 600px;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+        }
+        .landing .cta {
+            background: linear-gradient(135deg, #7a9b76 0%, #6a8b66 100%);
+            color: white;
+            padding: 18px 56px;
+            border: none;
+            border-radius: 60px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 24px rgba(122,155,118,0.25);
+            position: relative;
+            z-index: 1;
+        }
+        .landing .cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(122,155,118,0.35);
+        }
+        .landing .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 80px;
+            max-width: 1000px;
+            position: relative;
+            z-index: 1;
+        }
+        .landing .feature {
+            background: rgba(255,255,255,0.7);
+            padding: 32px;
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(122,155,118,0.15);
+            transition: all 0.3s ease;
+        }
+        .landing .feature:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(122,155,118,0.15);
+        }
+        .landing .feature h3 {
+            color: #3d5a3a;
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .landing .feature p {
+            color: #6b7f68;
+            font-size: 15px;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+        .app-container {
+            display: none;
+        }
+        .app-container.active {
+            display: block;
+        }
+        .header { 
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(245,245,240,0.95) 100%);
+            color: #3d5a3a; 
+            padding: 24px 48px; 
+            box-shadow: 0 2px 12px rgba(122,155,118,0.08);
+            border-bottom: 1px solid rgba(122,155,118,0.1);
+            backdrop-filter: blur(10px);
+        }
+        .header h1 { 
+            font-family: 'Playfair Display', serif;
+            font-size: 28px; 
+            font-weight: 400;
+            letter-spacing: 0px;
+        }
+        .header .subtitle {
+            font-size: 14px;
+            color: #6b7f68;
+            margin-top: 6px;
+            font-weight: 300;
+        }
+        .container { max-width: 1600px; margin: 0 auto; padding: 24px; }
+        .controls { 
+            background: rgba(255,255,255,0.95); 
+            padding: 32px; 
+            border-radius: 20px; 
+            margin-bottom: 24px; 
+            box-shadow: 0 4px 20px rgba(122,155,118,0.08);
+            border: 1px solid rgba(122,155,118,0.12);
+            backdrop-filter: blur(20px);
+        }
+        .input-group { margin-bottom: 16px; }
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 400; 
+            color: #495057;
+            font-size: 13px;
+        }
+        input[type="text"], textarea, select { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border: 1px solid rgba(122,155,118,0.2); 
+            border-radius: 12px; 
+            font-size: 14px;
+            background: #fafaf8;
+            color: #3e4c59;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #7a9b76;
+        }
+        textarea { min-height: 80px; resize: vertical; }
+        textarea::placeholder, input::placeholder { color: #adb5bd; }
+        .templates { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+        .template-chip { 
+            background: linear-gradient(135deg, #fafaf8 0%, #ffffff 100%); 
+            color: #3e4c59; 
+            padding: 10px 20px; 
+            border-radius: 24px; 
+            cursor: pointer; 
+            border: 1px solid rgba(122,155,118,0.2); 
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .template-chip:hover { 
+            background: white;
+            border-color: #7a9b76;
+            box-shadow: 0 2px 12px rgba(122,155,118,0.15);
+            transform: translateY(-1px);
+        }
+        .buttons { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+        button { 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-size: 14px; 
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+        .btn-primary { 
+            background: linear-gradient(135deg, #7a9b76 0%, #6a8b66 100%); 
+            color: white;
+            box-shadow: 0 4px 12px rgba(122,155,118,0.25);
+        }
+        .btn-primary:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(122,155,118,0.35);
+        }
+        .btn-secondary { 
+            background: white; 
+            color: #3e4c59; 
+            border: 1px solid rgba(122,155,118,0.2); 
+        }
+        .btn-secondary:hover { 
+            background: #fafaf8;
+            border-color: #7a9b76;
+            box-shadow: 0 2px 8px rgba(122,155,118,0.12);
+        }
+        .canvas-container {
+            background: linear-gradient(180deg, #ffffff 0%, #fdfdfb 100%);
+            border-radius: 20px;
+            padding: 0;
+            min-height: 700px;
+            box-shadow: 
+                0 8px 32px rgba(122,155,118,0.08),
+                0 2px 8px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(122,155,118,0.15);
+        }
+        .canvas { 
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(122,155,118,0.08) 1px, transparent 1px);
+            background-size: 24px 24px;
+            border-radius: 20px; 
+            padding: 60px; 
+            min-height: 700px; 
+            position: relative;
+            cursor: default;
+        }
+        .sidebar { 
+            position: fixed; 
+            right: 0; 
+            top: 96px; 
+            width: 300px; 
+            background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(250,250,248,0.98) 100%);
+            padding: 32px 24px; 
+            box-shadow: -4px 0 24px rgba(122,155,118,0.08);
+            height: calc(100vh - 96px); 
+            overflow-y: auto;
+            border-left: 1px solid rgba(122,155,118,0.15);
+            backdrop-filter: blur(20px);
+        }
+        .sidebar h3 { 
+            margin: 28px 0 16px 0; 
+            color: #3d5a3a;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(122,155,118,0.2);
+        }
+        .sidebar h3:first-child {
+            margin-top: 0;
+        }
+        .component { 
+            background: linear-gradient(135deg, #fafaf8 0%, #ffffff 100%); 
+            padding: 14px 16px; 
+            margin-bottom: 10px; 
+            border-radius: 12px; 
+            cursor: move; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            border: 1px solid rgba(122,155,118,0.15);
+            transition: all 0.3s ease;
+            font-size: 13px;
+            color: #3e4c59;
+            font-weight: 500;
+        }
+        .component:hover { 
+            background: white;
+            border-color: #7a9b76;
+            box-shadow: 0 4px 16px rgba(122,155,118,0.2);
+            transform: translateX(-4px);
+        }
+        .icon { 
+            width: 20px; 
+            height: 20px; 
+            font-size: 16px;
+            text-align: center;
+        }
+        .node { 
+            position: absolute; 
+            background: white;
+            border: 2px solid #d8ddd6; 
+            padding: 20px 24px; 
+            border-radius: 16px; 
+            cursor: move; 
+            box-shadow: 
+                0 4px 16px rgba(122,155,118,0.12),
+                0 2px 4px rgba(0,0,0,0.04);
+            min-width: 180px; 
+            text-align: center;
+            color: #3e4c59;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        .node:hover {
+            box-shadow: 
+                0 8px 24px rgba(122,155,118,0.18),
+                0 4px 8px rgba(0,0,0,0.06);
+            transform: translateY(-3px);
+        }
+        .node.selected {
+            border-color: #7a9b76;
+            box-shadow: 0 0 0 3px rgba(122,155,118,0.2);
+        }
+        .node-start { 
+            border-color: #7a9b76;
+            background: linear-gradient(135deg, #f4f7f3 0%, #ffffff 100%);
+            color: #3d5a3a;
+            border-width: 2.5px;
+        }
+        .node-end { 
+            border-color: #c4a57b;
+            background: linear-gradient(135deg, #faf7f2 0%, #ffffff 100%);
+            color: #6b5638;
+        }
+        .node-ivr {
+            background: linear-gradient(135deg, #eef5f9 0%, #ffffff 100%);
+            border-color: #8db5c9;
+            color: #3d5f6f;
+        }
+        .node-queue {
+            background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
+            border-color: #d9b86a;
+            color: #7a6838;
+        }
+        .node-transfer {
+            background: linear-gradient(135deg, #faf4f2 0%, #ffffff 100%);
+            border-color: #c9a59a;
+            color: #6b5145;
+        }
+        .node-variable {
+            background: linear-gradient(135deg, #f2f7f1 0%, #ffffff 100%);
+            border-color: #93bb89;
+            color: #3d5d39;
+        }
+        .connection-handle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #7a9b76;
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s;
+            opacity: 0;
+        }
+        .node:hover .connection-handle {
+            opacity: 1;
+        }
+        .connection-handle:hover {
+            transform: scale(1.4);
+            background: #6a8b66;
+            box-shadow: 0 0 8px rgba(122,155,118,0.5);
+        }
+        .handle-right { right: -5px; top: 50%; transform: translateY(-50%); }
+        .handle-left { left: -5px; top: 50%; transform: translateY(-50%); }
+        .handle-top { top: -5px; left: 50%; transform: translateX(-50%); }
+        .handle-bottom { bottom: -5px; left: 50%; transform: translateX(-50%); }
+        .arrow {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .arrow-line {
+            stroke: #7a9b76;
+            stroke-width: 2;
+            fill: none;
+        }
+        .arrow-head {
+            fill: #7a9b76;
+        }
+        .snackbar { 
+            position: fixed; 
+            bottom: 32px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: linear-gradient(135deg, #7a9b76 0%, #6a8b66 100%);
+            color: white; 
+            padding: 16px 32px; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 24px rgba(122,155,118,0.3);
+            display: none;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            z-index: 1000;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .snackbar.show { display: block; animation: slideUp 0.3s; }
+        @keyframes slideUp { from { bottom: -50px; opacity: 0; } to { bottom: 24px; opacity: 1; } }
+        
+        .mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 1px solid rgba(122,155,118,0.2);
+            padding: 12px 24px;
+            border-radius: 12px;
+            color: #3e4c59;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            z-index: 10;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(122,155,118,0.1);
+        }
+        .mode-toggle:hover {
+            background: #fafaf8;
+            border-color: #7a9b76;
+            box-shadow: 0 4px 12px rgba(122,155,118,0.2);
+        }
+        .mode-toggle.active {
+            background: linear-gradient(135deg, #7a9b76 0%, #6a8b66 100%);
+            color: white;
+            border-color: #7a9b76;
+            box-shadow: 0 4px 16px rgba(122,155,118,0.3);
+        }
+        .instruction {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(122,155,118,0.1);
+            border: 1px solid #7a9b76;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: #3d5a3a;
+            font-size: 12px;
+            z-index: 10;
+            max-width: 400px;
+        }
+        .instruction.hidden {
+            display: none;
+        }
+        
+        .edit-panel {
+            position: fixed;
+            right: 340px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(180deg, #ffffff 0%, #fafaf8 100%);
+            border: 1px solid rgba(122,155,118,0.2);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(122,155,118,0.2);
+            width: 360px;
+            max-height: 75vh;
+            overflow-y: auto;
+            display: none;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+        }
+        .edit-panel.active {
+            display: block;
+        }
+        .edit-panel h3 {
+            margin: 0 0 20px 0;
+            font-size: 20px;
+            font-weight: 500;
+            color: #3d5a3a;
+            font-family: 'Playfair Display', serif;
+        }
+        .edit-panel label {
+            display: block;
+            margin: 16px 0 8px 0;
+            font-size: 13px;
+            color: #3e4c59;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 11px;
+        }
+        .edit-panel input, .edit-panel textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid rgba(122,155,118,0.2);
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 8px;
+            background: #fafaf8;
+        }
+        .edit-panel textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        .edit-panel .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        .edit-panel button {
+            flex: 1;
+            padding: 10px;
+            font-size: 13px;
+        }
+        .ivr-option {
+            background: linear-gradient(135deg, #fafaf8 0%, #ffffff 100%);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(122,155,118,0.15);
+        }
+        .ivr-option input {
+            margin-bottom: 6px;
+        }
+        .ivr-option button {
+            width: 100%;
+            margin-top: 6px;
+            background: linear-gradient(135deg, #c89b8c 0%, #b88b7c 100%);
+            color: white;
+            font-size: 12px;
+            padding: 8px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="landing" id="landingPage">
+        <h1>Contact Center Flow Art</h1>
+        <p class="tagline">Design elegant contact center experiences with visual clarity</p>
+        <button class="cta" onclick="startDesigning()">Start Designing</button>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>🎨 Visual Canvas</h3>
+                <p>Drag and drop components onto an intuitive whiteboard canvas</p>
+            </div>
+            <div class="feature">
+                <h3>🔗 Flow Connections</h3>
+                <p>Connect nodes with arrows to visualize customer journeys</p>
+            </div>
+            <div class="feature">
+                <h3>⚙️ Deep Configuration</h3>
+                <p>Configure IVR menus, queues, transfers, and variables in detail</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container" id="appContainer">
+        <div class="header">
+            <h1>Contact Center Flow Art</h1>
+            <div class="subtitle">Visual flow builder for contact center experiences</div>
+        </div>
+
+        <div class="sidebar">
+        <h3>Entry Points</h3>
+        <div class="component" draggable="true" data-type="start" data-label="Inbound Call" data-class="node-start">
+            <span class="icon">📞</span>
+            <span>Inbound Call</span>
+        </div>
+        <div class="component" draggable="true" data-type="start" data-label="SMS Entry" data-class="node-start">
+            <span class="icon">💬</span>
+            <span>SMS Entry</span>
+        </div>
+        <div class="component" draggable="true" data-type="start" data-label="Email Entry" data-class="node-start">
+            <span class="icon">✉</span>
+            <span>Email Entry</span>
+        </div>
+        <div class="component" draggable="true" data-type="start" data-label="Chat Entry" data-class="node-start">
+            <span class="icon">💭</span>
+            <span>Chat Entry</span>
+        </div>
+
+        <h3>IVR & Routing</h3>
+        <div class="component" draggable="true" data-type="default" data-label="IVR Menu" data-class="node-ivr">
+            <span class="icon">☰</span>
+            <span>IVR Menu</span>
+        </div>
+        <div class="component" draggable="true" data-type="default" data-label="Decision Branch" data-class="node-default">
+            <span class="icon">◆</span>
+            <span>Decision Branch</span>
+        </div>
+        <div class="component" draggable="true" data-type="default" data-label="Play Message" data-class="node-default">
+            <span class="icon">▶</span>
+            <span>Play Message</span>
+        </div>
+        <div class="component" draggable="true" data-type="default" data-label="Collect Input" data-class="node-default">
+            <span class="icon">⌨</span>
+            <span>Collect Input</span>
+        </div>
+
+        <h3>Queue & Transfer</h3>
+        <div class="component" draggable="true" data-type="default" data-label="Queue" data-class="node-queue">
+            <span class="icon">⋮</span>
+            <span>Queue</span>
+        </div>
+        <div class="component" draggable="true" data-type="default" data-label="Transfer to Agent" data-class="node-transfer">
+            <span class="icon">↗</span>
+            <span>Transfer to Agent</span>
+        </div>
+        <div class="component" draggable="true" data-type="default" data-label="Transfer to Number" data-class="node-transfer">
+            <span class="icon">☎</span>
+            <span>Transfer to Number</span>
+        </div>
+        <div class="component" draggable="true" data-type="default" data-label="Voicemail" data-class="node-default">
+            <span class="icon">📧</span>
+            <span>Voicemail</span>
+        </div>
+
+        <h3>AI & Automation</h3>
+        <div class="component" draggable="true" data-type="default" data-label="Virtual Agent" data-class="node-default">
+            <span class="icon">🤖</span>
+            <span>Virtual Agent</span>
+        </div>
+        <div class="component" draggable="true" data-type="default" data-label="AI Routing" data-class="node-default">
+            <span class="icon">🎯</span>
+            <span>AI Routing</span>
+        </div>
+
+        <h3>Data & Variables</h3>
+        <div class="component" draggable="true" data-type="default" data-label="Set Variable" data-class="node-variable">
+            <span class="icon">📝</span>
+            <span>Set Variable</span>
+        </div>
+        <div class="component" draggable="true" data-type="default" data-label="Get Caller Info" data-class="node-variable">
+            <span class="icon">ℹ</span>
+            <span>Get Caller Info</span>
+        </div>
+        <div class="component" draggable="true" data-type="default" data-label="API Call" data-class="node-variable">
+            <span class="icon">🔌</span>
+            <span>API Call</span>
+        </div>
+        <div class="component" draggable="true" data-type="default" data-label="CRM Lookup" data-class="node-variable">
+            <span class="icon">🔍</span>
+            <span>CRM Lookup</span>
+        </div>
+
+        <h3>End Points</h3>
+        <div class="component" draggable="true" data-type="end" data-label="End Call" data-class="node-end">
+            <span class="icon">■</span>
+            <span>End Call</span>
+        </div>
+        <div class="component" draggable="true" data-type="end" data-label="Disconnect" data-class="node-end">
+            <span class="icon">⊗</span>
+            <span>Disconnect</span>
+        </div>
+    </div>
+
+    <div class="container" style="margin-right: 320px;">
+        <div class="controls">
+            <div class="input-group">
+                <label for="flowDescription">Describe your flow</label>
+                <textarea id="flowDescription" placeholder="Describe your Zoom contact center flow..."></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label for="entryNumber">Entry Phone Number</label>
+                <input type="text" id="entryNumber" placeholder="+1 (555) 000-0000">
+            </div>
+
+            <div class="templates">
+                <button class="template-chip" onclick="setTemplate('Create an IVR menu with options for sales, support, and billing')">IVR Template</button>
+                <button class="template-chip" onclick="setTemplate('Route calls to different queues based on caller input with overflow handling')">Queue Flow</button>
+                <button class="template-chip" onclick="setTemplate('Virtual agent handles initial inquiry, escalates to human agent if needed')">AI Support</button>
+            </div>
+
+            <div class="buttons">
+                <button class="btn-primary" onclick="generateFlow()">Generate Flow</button>
+                <button class="btn-secondary" onclick="validateFlow()">Validate</button>
+                <button class="btn-secondary" onclick="exportFlow()">Export JSON</button>
+                <button class="btn-secondary" onclick="undo()">↶ Undo</button>
+                <button class="btn-secondary" onclick="clearCanvas()">Clear</button>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <div class="instruction" id="instruction">
+                💡 Tip: Click "Connect Nodes" button, then click two nodes to draw an arrow between them
+            </div>
+            <button class="mode-toggle" id="modeToggle" onclick="toggleConnectionMode()">
+                Connect Nodes
+            </button>
+            <svg id="arrowSvg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></svg>
+            <div class="canvas" id="canvas">
+                <div class="node node-start" style="left: 50px; top: 100px;" draggable="true" data-id="1">
+                    Inbound Call
+                    <div class="connection-handle handle-right" data-node="1" data-side="right"></div>
+                    <div class="connection-handle handle-bottom" data-node="1" data-side="bottom"></div>
+                    <div class="connection-handle handle-left" data-node="1" data-side="left"></div>
+                    <div class="connection-handle handle-top" data-node="1" data-side="top"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="snackbar" id="snackbar"></div>
+
+    <div class="edit-panel" id="editPanel">
+        <h3 id="editPanelTitle">Edit Node</h3>
+        <div id="editPanelContent"></div>
+        <div class="btn-group">
+            <button class="btn-primary" onclick="saveNodeEdit()">Save</button>
+            <button class="btn-secondary" onclick="closeEditPanel()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        let nodeCounter = 1;
+        let connectionMode = false;
+        let selectedNode = null;
+        let connections = [];
+        let variables = [];
+        let history = [];
+        let currentEditNode = null;
+
+        function startDesigning() {
+            document.getElementById('landingPage').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+        }
+
+        function startDesigning_old() {
+            console.log('startDesigning called');
+            const landingPage = document.getElementById('landingPage');
+            const appContainer = document.getElementById('appContainer');
+            console.log('landingPage:', landingPage);
+            console.log('appContainer:', appContainer);
+            if (landingPage) landingPage.style.display = 'none';
+            if (appContainer) appContainer.classList.add('active');
+            console.log('Transition complete');
+        }
+
+        function toggleConnectionMode() {
+            connectionMode = !connectionMode;
+            const toggle = document.getElementById('modeToggle');
+            const instruction = document.getElementById('instruction');
+            toggle.classList.toggle('active');
+            
+            if (connectionMode) {
+                toggle.textContent = 'Connection Mode: ON - Click nodes to connect';
+                instruction.style.display = 'none';
+                showSnackbar('Click two nodes to connect them with an arrow');
+            } else {
+                toggle.textContent = 'Connect Nodes';
+                selectedNode = null;
+                document.querySelectorAll('.node').forEach(n => n.classList.remove('selected'));
+            }
+        }
+
+        function setTemplate(text) {
+            document.getElementById('flowDescription').value = text;
+        }
+
+function generateFlow() {
+    const canvas = document.getElementById('canvas');
+    const description = document.getElementById('flowDescription').value;
+    const descLower = description.toLowerCase();
+    
+    if (!description) {
+        showSnackbar('Please enter a flow description');
+        return;
+    }
+
+    saveHistory();
+    
+    // Clear existing nodes except the first one
+    const existingNodes = Array.from(document.querySelectorAll('.node'));
+    existingNodes.forEach((node, i) => {
+        if (i > 0) node.remove();
+    });
+    connections = [];
+    
+    let currentNode = { id: '1', element: document.querySelector('[data-id="1"]') };
+    let currentX = 280;
+    let currentY = 100;
+    
+    // Step 1: Check for business hours check
+    if (descLower.includes('business hours') || descLower.includes('hours check')) {
+        const hoursMatch = description.match(/(\d+)-(\d+)/);
+        const hoursNode = addNodeWithReturn('default', 'Business Hours Check', currentX, currentY, 'node-default');
+        connections.push({ from: currentNode.id, to: hoursNode.id });
+        
+        if (hoursMatch) {
+            hoursNode.element.dataset.startHour = hoursMatch[1];
+            hoursNode.element.dataset.endHour = hoursMatch[2];
+        }
+        
+        // Step 2: Create after-hours path
+        if (descLower.includes('after hours')) {
+            const afterHoursY = currentY + 150;
+            
+            if (descLower.includes('voicemail')) {
+                const vmNode = addNodeWithReturn('default', 'Voicemail', 100, afterHoursY, 'node-default');
+                connections.push({ from: hoursNode.id, to: vmNode.id });
+                
+                const endAfterHours = addNodeWithReturn('end', 'End Call', 100, afterHoursY + 120, 'node-end');
+                connections.push({ from: vmNode.id, to: endAfterHours.id });
+            }
+        }
+        
+        // Continue with business hours path
+        currentNode = hoursNode;
+        currentX = 460;
+        currentY = 100;
+    }
+    
+    // Step 3: Check for IVR
+    if (descLower.includes('ivr') || descLower.includes('greeting')) {
+        const ivrNode = addNodeWithReturn('default', 'IVR Menu', currentX, currentY, 'node-ivr');
+        connections.push({ from: currentNode.id, to: ivrNode.id });
+        
+        // Step 4: Extract EXACT IVR options from the description
+        let options = [];
+        
+        // Look for pattern: "three options" or "3 options" followed by the list
+        const optionsMatch = description.match(/(?:three|3|two|2|four|4|five|5|six|6)\s+options?[.:\s]+(.+?)(?:\.|$)/i);
+        
+        if (optionsMatch) {
+            const optionsText = optionsMatch[1];
+            // Split by comma and/or "and"
+            const parts = optionsText.split(/,\s*(?:and\s+)?|(?:\s+and\s+)/);
+            
+            options = parts
+                .map(s => s.trim())
+                .filter(s => s.length > 0 && s.length < 40)
+                .map((opt, i) => {
+                    // Capitalize properly
+                    const capitalized = opt.split(' ').map(w => 
+                        w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()
+                    ).join(' ');
+                    
+                    return {
+                        key: (i + 1).toString(),
+                        label: capitalized
+                    };
+                });
+        }
+        
+        // Store IVR configuration
+        if (options.length > 0) {
+            ivrNode.element.dataset.options = JSON.stringify(options);
+            ivrNode.element.dataset.greeting = 'Please select from the following options.';
+            
+            // Step 5: Create exactly one queue per option
+            const startQueueX = currentX - ((options.length - 1) * 100);
+            
+            options.forEach((opt, i) => {
+                const queueX = startQueueX + (i * 200);
+                const queueY = currentY + 150;
+                const queueNode = addNodeWithReturn('default', `Queue - ${opt.label}`, queueX, queueY, 'node-queue');
+                
+                // Connect IVR to queue
+                connections.push({ from: ivrNode.id, to: queueNode.id });
+                
+                // Configure queue
+                queueNode.element.dataset.queueType = 'skill';
+                queueNode.element.dataset.maxWait = '300';
+                queueNode.element.dataset.overflow = 'voicemail';
+                
+                // Create end call for this queue
+                const endNode = addNodeWithReturn('end', 'End Call', queueX, queueY + 120, 'node-end');
+                connections.push({ from: queueNode.id, to: endNode.id });
+            });
+        }
+    }
+    
+    drawConnections();
+    showSnackbar('Flow generated exactly as described!');
+}
+        
+        function addNodeWithReturn(type, label, x, y, cssClass = 'node-default') {
+            nodeCounter++;
+            const canvas = document.getElementById('canvas');
+            const node = document.createElement('div');
+            node.className = `node ${cssClass}`;
+            node.style.left = x + 'px';
+            node.style.top = y + 'px';
+            node.textContent = label;
+            node.draggable = true;
+            node.dataset.id = nodeCounter.toString();
+            
+            node.addEventListener('dragstart', handleDragStart);
+            node.addEventListener('dragend', handleDragEnd);
+            node.addEventListener('click', handleNodeClick);
+            node.addEventListener('dblclick', handleNodeDoubleClick);
+            
+            // Add connection handles (all 4 sides)
+            const handles = ['right', 'left', 'top', 'bottom'];
+            handles.forEach(side => {
+                const handle = document.createElement('div');
+                handle.className = `connection-handle handle-${side}`;
+                handle.dataset.node = nodeCounter.toString();
+                handle.dataset.side = side;
+                node.appendChild(handle);
+            });
+            
+            canvas.appendChild(node);
+            
+            return { element: node, id: nodeCounter.toString() };
+        }
+
+        function addNode(type, label, x, y, cssClass = 'node-default') {
+            saveHistory();
+            
+            nodeCounter++;
+            const canvas = document.getElementById('canvas');
+            const node = document.createElement('div');
+            node.className = `node ${cssClass}`;
+            node.style.left = x + 'px';
+            node.style.top = y + 'px';
+            node.textContent = label;
+            node.draggable = true;
+            node.dataset.id = nodeCounter;
+            
+            node.addEventListener('dragstart', handleDragStart);
+            node.addEventListener('dragend', handleDragEnd);
+            node.addEventListener('click', handleNodeClick);
+            node.addEventListener('dblclick', handleNodeDoubleClick);
+            
+            // Add connection handles (all 4 sides)
+            const handles = ['right', 'left', 'top', 'bottom'];
+            handles.forEach(side => {
+                const handle = document.createElement('div');
+                handle.className = `connection-handle handle-${side}`;
+                handle.dataset.node = nodeCounter;
+                handle.dataset.side = side;
+                node.appendChild(handle);
+            });
+            
+            canvas.appendChild(node);
+        }
+
+        function handleNodeClick(e) {
+            if (connectionMode) {
+                e.stopPropagation();
+                if (selectedNode === this) {
+                    this.classList.remove('selected');
+                    selectedNode = null;
+                } else if (selectedNode) {
+                    // Create connection between selectedNode and this node
+                    createConnection(selectedNode.dataset.id, this.dataset.id);
+                    selectedNode.classList.remove('selected');
+                    selectedNode = null;
+                } else {
+                    document.querySelectorAll('.node').forEach(n => n.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedNode = this;
+                }
+            }
+        }
+
+        function handleNodeDoubleClick(e) {
+            if (connectionMode) return;
+            openEditPanel(this);
+        }
+
+        function openEditPanel(node) {
+            currentEditNode = node;
+            const panel = document.getElementById('editPanel');
+            const content = document.getElementById('editPanelContent');
+            const title = document.getElementById('editPanelTitle');
+            
+            const label = node.textContent.trim();
+            const nodeData = node.dataset;
+            
+            // Determine node type and create appropriate edit form
+            if (label.includes('IVR') || label.includes('Menu')) {
+                title.textContent = 'Edit IVR Menu';
+                content.innerHTML = `
+                    <label>Menu Name</label>
+                    <input type="text" id="edit_name" value="${label}">
+                    
+                    <label>Greeting Message</label>
+                    <textarea id="edit_greeting" placeholder="Welcome to our contact center...">${nodeData.greeting || ''}</textarea>
+                    
+                    <label>IVR Options</label>
+                    <div id="ivrOptions">
+                        ${(nodeData.options ? JSON.parse(nodeData.options) : [{key: '1', label: 'Sales'}, {key: '2', label: 'Support'}]).map((opt, i) => `
+                            <div class="ivr-option">
+                                <input type="text" placeholder="Key (1-9)" value="${opt.key}" data-opt-idx="${i}" class="opt-key" style="width: 60px; display: inline-block; margin-right: 8px;">
+                                <input type="text" placeholder="Option label" value="${opt.label}" data-opt-idx="${i}" class="opt-label" style="width: calc(100% - 72px); display: inline-block;">
+                                <button onclick="removeOption(${i})">Remove</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn-secondary" onclick="addIVROption()" style="width: 100%; margin-top: 8px;">+ Add Option</button>
+                `;
+            } else if (label.includes('Queue')) {
+                title.textContent = 'Edit Queue';
+                content.innerHTML = `
+                    <label>Queue Name</label>
+                    <input type="text" id="edit_name" value="${label}">
+                    
+                    <label>Queue Type</label>
+                    <select id="edit_queueType">
+                        <option value="skill" ${nodeData.queueType === 'skill' ? 'selected' : ''}>Skill-Based</option>
+                        <option value="round-robin" ${nodeData.queueType === 'round-robin' ? 'selected' : ''}>Round Robin</option>
+                        <option value="priority" ${nodeData.queueType === 'priority' ? 'selected' : ''}>Priority</option>
+                    </select>
+                    
+                    <label>Max Wait Time (seconds)</label>
+                    <input type="number" id="edit_maxWait" value="${nodeData.maxWait || 300}" min="0">
+                    
+                    <label>Overflow Action</label>
+                    <select id="edit_overflow">
+                        <option value="voicemail" ${nodeData.overflow === 'voicemail' ? 'selected' : ''}>Send to Voicemail</option>
+                        <option value="callback" ${nodeData.overflow === 'callback' ? 'selected' : ''}>Offer Callback</option>
+                        <option value="transfer" ${nodeData.overflow === 'transfer' ? 'selected' : ''}>Transfer to Backup</option>
+                    </select>
+                `;
+            } else if (label.includes('Transfer')) {
+                title.textContent = 'Edit Transfer';
+                content.innerHTML = `
+                    <label>Node Name</label>
+                    <input type="text" id="edit_name" value="${label}">
+                    
+                    <label>Transfer Type</label>
+                    <select id="edit_transferType">
+                        <option value="agent" ${nodeData.transferType === 'agent' ? 'selected' : ''}>Agent/Queue</option>
+                        <option value="external" ${nodeData.transferType === 'external' ? 'selected' : ''}>External Number</option>
+                    </select>
+                    
+                    <label>Destination</label>
+                    <input type="text" id="edit_destination" value="${nodeData.destination || ''}" placeholder="Agent name or phone number">
+                    
+                    <label>Announcement</label>
+                    <textarea id="edit_announcement" placeholder="Transferring you now...">${nodeData.announcement || ''}</textarea>
+                `;
+            } else if (label.includes('Variable')) {
+                title.textContent = 'Edit Variable';
+                content.innerHTML = `
+                    <label>Node Name</label>
+                    <input type="text" id="edit_name" value="${label}">
+                    
+                    <label>Variable Name</label>
+                    <input type="text" id="edit_varName" value="${nodeData.varName || ''}" placeholder="e.g., customer_id">
+                    
+                    <label>Variable Value</label>
+                    <input type="text" id="edit_varValue" value="${nodeData.varValue || ''}" placeholder="Static value or expression">
+                    
+                    <label>Data Type</label>
+                    <select id="edit_varType">
+                        <option value="string" ${nodeData.varType === 'string' ? 'selected' : ''}>String</option>
+                        <option value="number" ${nodeData.varType === 'number' ? 'selected' : ''}>Number</option>
+                        <option value="boolean" ${nodeData.varType === 'boolean' ? 'selected' : ''}>Boolean</option>
+                    </select>
+                `;
+            } else {
+                title.textContent = 'Edit Node';
+                content.innerHTML = `
+                    <label>Node Name</label>
+                    <input type="text" id="edit_name" value="${label}">
+                    
+                    <label>Description</label>
+                    <textarea id="edit_description" placeholder="Optional description...">${nodeData.description || ''}</textarea>
+                `;
+            }
+            
+            panel.classList.add('active');
+        }
+
+        function closeEditPanel() {
+            document.getElementById('editPanel').classList.remove('active');
+            currentEditNode = null;
+        }
+
+        function saveNodeEdit() {
+            if (!currentEditNode) return;
+            
+            saveHistory();
+            
+            const name = document.getElementById('edit_name')?.value;
+            if (name) {
+                const handles = currentEditNode.querySelectorAll('.connection-handle');
+                currentEditNode.textContent = name;
+                handles.forEach(h => currentEditNode.appendChild(h));
+            }
+            
+            // Save additional data to node dataset
+            const inputs = document.getElementById('editPanelContent').querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.id && input.id.startsWith('edit_')) {
+                    const key = input.id.replace('edit_', '');
+                    currentEditNode.dataset[key] = input.value;
+                }
+            });
+            
+            // Handle IVR options specially
+            const optKeys = document.querySelectorAll('.opt-key');
+            const optLabels = document.querySelectorAll('.opt-label');
+            if (optKeys.length > 0) {
+                const options = Array.from(optKeys).map((keyInput, i) => ({
+                    key: keyInput.value,
+                    label: optLabels[i].value
+                }));
+                currentEditNode.dataset.options = JSON.stringify(options);
+            }
+            
+            closeEditPanel();
+            showSnackbar('Node updated');
+        }
+
+        function addIVROption() {
+            const container = document.getElementById('ivrOptions');
+            const idx = container.children.length;
+            const div = document.createElement('div');
+            div.className = 'ivr-option';
+            div.innerHTML = `
+                <input type="text" placeholder="Key (1-9)" value="${idx + 1}" data-opt-idx="${idx}" class="opt-key" style="width: 60px; display: inline-block; margin-right: 8px;">
+                <input type="text" placeholder="Option label" value="Option ${idx + 1}" data-opt-idx="${idx}" class="opt-label" style="width: calc(100% - 72px); display: inline-block;">
+                <button onclick="this.parentElement.remove()">Remove</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeOption(idx) {
+            event.target.parentElement.remove();
+        }
+
+        function saveHistory() {
+            const state = {
+                nodes: Array.from(document.querySelectorAll('.node')).map(n => ({
+                    id: n.dataset.id,
+                    html: n.outerHTML,
+                    data: {...n.dataset}
+                })),
+                connections: [...connections]
+            };
+            history.push(state);
+            if (history.length > 20) history.shift();
+        }
+
+        function undo() {
+            if (history.length === 0) {
+                showSnackbar('Nothing to undo');
+                return;
+            }
+            
+            const prevState = history.pop();
+            const canvas = document.getElementById('canvas');
+            
+            // Clear canvas
+            canvas.innerHTML = '';
+            
+            // Restore nodes
+            prevState.nodes.forEach(nodeData => {
+                const temp = document.createElement('div');
+                temp.innerHTML = nodeData.html;
+                const node = temp.firstChild;
+                
+                // Re-attach event listeners
+                node.addEventListener('dragstart', handleDragStart);
+                node.addEventListener('dragend', handleDragEnd);
+                node.addEventListener('click', handleNodeClick);
+                node.addEventListener('dblclick', handleNodeDoubleClick);
+                
+                canvas.appendChild(node);
+            });
+            
+            // Restore connections
+            connections = prevState.connections;
+            drawConnections();
+            
+            showSnackbar('Undone');
+        }
+
+        function createConnection(fromId, toId) {
+            saveHistory();
+            connections.push({ from: fromId, to: toId });
+            drawConnections();
+        }
+
+        function drawConnections() {
+            const svg = document.getElementById('arrowSvg');
+            svg.innerHTML = '';
+            
+            connections.forEach(conn => {
+                const from = document.querySelector(`[data-id="${conn.from}"]`);
+                const to = document.querySelector(`[data-id="${conn.to}"]`);
+                
+                if (!from || !to) return;
+                
+                const fromRect = from.getBoundingClientRect();
+                const toRect = to.getBoundingClientRect();
+                const canvasRect = document.getElementById('canvas').getBoundingClientRect();
+                
+                const x1 = fromRect.left + fromRect.width / 2 - canvasRect.left;
+                const y1 = fromRect.top + fromRect.height / 2 - canvasRect.top;
+                const x2 = toRect.left + toRect.width / 2 - canvasRect.left;
+                const y2 = toRect.top + toRect.height / 2 - canvasRect.top;
+                
+                const dx = x2 - x1;
+                const dy = y2 - y1;
+                const angle = Math.atan2(dy, dx);
+                
+                const arrowSize = 10;
+                const endX = x2 - Math.cos(angle) * 70;
+                const endY = y2 - Math.sin(angle) * 40;
+                
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const controlX = (x1 + endX) / 2;
+                const controlY = (y1 + endY) / 2 - 50;
+                line.setAttribute('d', `M ${x1} ${y1} Q ${controlX} ${controlY} ${endX} ${endY}`);
+                line.setAttribute('class', 'arrow-line');
+                
+                const arrowHead = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                const points = [
+                    [endX, endY],
+                    [endX - arrowSize * Math.cos(angle - Math.PI / 6), endY - arrowSize * Math.sin(angle - Math.PI / 6)],
+                    [endX - arrowSize * Math.cos(angle + Math.PI / 6), endY - arrowSize * Math.sin(angle + Math.PI / 6)]
+                ];
+                arrowHead.setAttribute('points', points.map(p => p.join(',')).join(' '));
+                arrowHead.setAttribute('class', 'arrow-head');
+                
+                svg.appendChild(line);
+                svg.appendChild(arrowHead);
+            });
+        }
+
+        function validateFlow() {
+            const nodes = document.querySelectorAll('.node');
+            const hasStart = Array.from(nodes).some(n => n.className.includes('node-start'));
+            const hasEnd = Array.from(nodes).some(n => n.className.includes('node-end'));
+            
+            if (!hasStart) {
+                showSnackbar('Warning: No entry point defined!');
+                return;
+            }
+            if (!hasEnd) {
+                showSnackbar('Warning: No end point defined!');
+                return;
+            }
+            if (connections.length === 0) {
+                showSnackbar('Warning: No connections between nodes!');
+                return;
+            }
+            
+            showSnackbar('✓ Flow validated - Ready for deployment!');
+        }
+
+        function exportFlow() {
+            const entryNumber = document.getElementById('entryNumber').value;
+                const nodes = Array.from(document.querySelectorAll('.node')).map(node => ({
+                id: node.dataset.id,
+                type: node.className.includes('start') ? 'entry' : 
+                      node.className.includes('end') ? 'exit' : 'action',
+                label: node.textContent.trim(),
+                position: { 
+                    x: parseInt(node.style.left), 
+                    y: parseInt(node.style.top) 
+                },
+                category: node.className.split(' ')[1],
+                config: {...node.dataset}
+            }));
+            
+            const flowData = {
+                name: 'Zoom Contact Center Flow',
+                entryPoint: entryNumber || '+1 (555) 000-0000',
+                created: new Date().toISOString(),
+                nodes: nodes,
+                connections: connections,
+                variables: variables
+            };
+            
+            const data = JSON.stringify(flowData, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'zoom-contact-center-flow.json';
+            a.click();
+            
+            showSnackbar('✓ Flow exported successfully!');
+        }
+
+        function clearCanvas() {
+            if (!confirm('Clear all nodes and connections?')) return;
+            
+            saveHistory();
+            
+            const canvas = document.getElementById('canvas');
+            const nodes = canvas.querySelectorAll('.node');
+            nodes.forEach(node => node.remove());
+            
+            connections = [];
+            variables = [];
+            nodeCounter = 0;
+            drawConnections();
+            
+            // Re-add starting node
+            addNode('start', 'Inbound Call', 50, 100, 'node-start');
+            
+            showSnackbar('Canvas cleared!');
+        }
+
+        function showSnackbar(message) {
+            const snackbar = document.getElementById('snackbar');
+            snackbar.textContent = message;
+            snackbar.classList.add('show');
+            setTimeout(() => snackbar.classList.remove('show'), 3000);
+        }
+
+        let draggedElement = null;
+
+        document.querySelectorAll('.component').forEach(comp => {
+            comp.addEventListener('dragstart', function(e) {
+                const type = this.dataset.type;
+                const label = this.dataset.label;
+                const cssClass = this.dataset.class;
+                e.dataTransfer.setData('type', type);
+                e.dataTransfer.setData('label', label);
+                e.dataTransfer.setData('class', cssClass);
+            });
+        });
+
+        document.getElementById('canvas').addEventListener('dragover', function(e) {
+            e.preventDefault();
+        });
+
+        document.getElementById('canvas').addEventListener('drop', function(e) {
+            e.preventDefault();
+            const type = e.dataTransfer.getData('type');
+            const label = e.dataTransfer.getData('label');
+            const cssClass = e.dataTransfer.getData('class');
+            
+            if (type && label) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left - 70;
+                const y = e.clientY - rect.top - 25;
+                addNode(type, label, x, y, cssClass);
+            }
+        });
+
+        function handleDragStart(e) {
+            if (connectionMode) {
+                e.preventDefault();
+                return;
+            }
+            draggedElement = this;
+            this.style.opacity = '0.5';
+        }
+
+        function handleDragEnd(e) {
+            this.style.opacity = '1';
+            const rect = document.getElementById('canvas').getBoundingClientRect();
+            const x = e.clientX - rect.left - 70;
+            const y = e.clientY - rect.top - 25;
+            this.style.left = Math.max(0, x) + 'px';
+            this.style.top = Math.max(0, y) + 'px';
+            drawConnections();
+        }
+
+        // Redraw connections when window resizes
+        window.addEventListener('resize', drawConnections);
+        setInterval(drawConnections, 100);
+    </script>
+</body>
+</html>
