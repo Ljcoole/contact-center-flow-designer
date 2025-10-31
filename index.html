@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Center Flow Art</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: #fafaf8;
+            color: #3e4c59;
+            margin: 0;
+            padding: 0;
+        }
+        .landing {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding:  4rem 2rem;
+        }
+        .landing h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #1f2933;
+        }
+        .landing p {
+            font-size: 1.25rem;
+            color: #52606d;
+            margin-bottom: 2rem;
+        }
+        .landing button {
+            background-color: #3e4c59;
+            color: white;
+            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .landing button:hover {
+            background-color: #2f3e4e;
+        }
+        /* Editing Panel Styles */
+        .editor {
+            display: none;
+            padding: 1rem;
+            background: #f4f5f7;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 1rem;
+        }
+        .editor label {
+            display: block;
+            margin: 0.5rem 0 0.25rem;
+            font-size: 0.9rem;
+        }
+        .editor input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+        }
+        .editor button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .save-btn {
+            background-color: #3e4c59;
+            color: white;
+        }
+        .save-btn:hover {
+            background-color: #2f3e4e;
+        }
+        .cancel-btn {
+            background-color: #f2f2f2;
+            color: #3e4c59;
+        }
+        .cancel-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* Canvas Styles */
+        #canvas {
+            width: 100%;
+            height: 80vh;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-top: 2rem;
+            position: relative;
+            background-color: white;
+            overflow: hidden;
+        }
+        .node {
+            position: absolute;
+            width: 140px;
+            height: 50px;
+            background-color: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: move;
+        }
+        .node.add {
+            border: 2px dashed #3e4c59;
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+            color: #3e4c59;
+        }
+        .connection {
+            position: absolute;
+            pointer-events: none;
+        }
+        .add-node-btn {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #3e4c59;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .add-node-btn:hover {
+            background-color: #2f3e4e;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .landing {
+                padding: 2rem 1rem;
+            }
+            .landing h1 {
+                font-size: 2.5rem;
+            }
+            .landing p {
+                font-size: 1rem;
+            }
+            .node {
+                width: 120px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="landing" id="landing">
+        <h1>Contact Center Flow Art</h1>
+        <p>Visualize and build your flow like an artist.</p>
+        <button onclick="showEditor()">Get Started</button>
+    </div>
+    <div class="editor" id="editor">
+        <label for="nodeType">Node Type:</label>
+        <input type="text" id="nodeType" placeholder="e.g., Greeting, Menu, Agent" />
+        <label for="nodeText">Node Text:</label>
+        <input type="text" id="nodeText" placeholder="e.g., Welcome to our service!" />
+        <button class="save-btn" onclick="addNode()">Save</button>
+        <button class="cancel-btn" onclick="hideEditor()">Cancel</button>
+    </div>
+    <button class="add-node-btn" id="addNodeBtn" style="display:none;" onclick="openEditor()">Add Node</button>
+    <div id="canvas">
+        <!-- Nodes and connections will be added here dynamically -->
+    </div>
+
+    <script>
+        let nodes = [];
+        let connections = [];
+        const canvas = document.getElementById('canvas');
+        const editor = document.getElementById('editor');
+        const addNodeBtn = document.getElementById('addNodeBtn');
+        let selectedNode = null;
+
+        function showEditor() {
+            document.getElementById('landing').style.display = 'none';
+            editor.style.display = 'block';
+            addNodeBtn.style.display = 'block';
+        }
+
+        function hideEditor() {
+            editor.style.display = 'none';
+            selectedNode = null;
+        }
+
+        function openEditor(node) {
+            selectedNode = node;
+            document.getElementById('nodeType').value = node ? node.dataset.type : '';
+            document.getElementById('nodeText').value = node ? node.textContent : '';
+            editor.style.display = 'block';
+        }
+
+        function addNode() {
+            const type = document.getElementById('nodeType').value;
+            const text = document.getElementById('nodeText').value;
+            if (selectedNode) {
+                selectedNode.dataset.type = type;
+                selectedNode.textContent = text;
+            } else {
+                const node = document.createElement('div');
+                node.className = 'node';
+                node.dataset.type = type;
+                node.textContent = text;
+                node.style.left = '20px';
+                node.style.top = '20px';
+                node.draggable = true;
+                node.addEventListener('dragstart', (e) => dragStart(e, node));
+                node.addEventListener('dragend', dragEnd);
+                node.addEventListener('click', () => openEditor(node));
+                canvas.appendChild(node);
+                nodes.push(node);
+            }
+            hideEditor();
+            drawConnections();
+        }
+
+        function dragStart(e, node) {
+            e.dataTransfer.setData('text/plain', nodes.indexOf(node));
+        }
+
+        function dragEnd(e) {
+            const index = e.dataTransfer.getData('text/plain');
+            const node = nodes[index];
+            const rect = canvas.getBoundingClientRect();
+            node.style.left = `${e.clientX - rect.left - node.offsetWidth / 2}px`;
+            node.style.top = `${e.clientY - rect.top - node.offsetHeight / 2}px`;
+            drawConnections();
+        }
+
+        function connectNodes(node1, node2) {
+            connections.push({ from: node1, to: node2 });
+            drawConnections();
+        }
+
+        function drawConnections() {
+            // Clear existing connections
+            canvas.querySelectorAll('.connection').forEach(conn => conn.remove());
+            connections.forEach(conn => {
+                const x1 = parseInt(conn.from.style.left) + conn.from.offsetWidth;
+                const y1 = parseInt(conn.from.style.top) + conn.from.offsetHeight / 2;
+                const x2 = parseInt(conn.to.style.left);
+                const y2 = parseInt(conn.to.style.top) + conn.to.offsetHeight / 2;
+                const line = document.createElement('div');
+                line.className = 'connection';
+                line.style.left = `${x1}px`;
+                line.style.top = `${Math.min(y1, y2)}px`;
+                line.style.width = `${x2 - x1}px`;
+                line.style.height = `${Math.abs(y2 - y1)}px`;
+                line.style.borderLeft = '2px solid #3e4c59';
+                line.style.borderBottom = '2px solid #3e4c59';
+                line.style.borderBottomLeftRadius = '4px';
+                canvas.appendChild(line);
+            });
+        }
+
+        // Make nodes and add-node button draggable to create connections
+        document.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        document.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const index = e.dataTransfer.getData('text/plain');
+            const node = nodes[index];
+            const rect = canvas.getBoundingClientRect();
+            node.style.left = `${e.clientX - rect.left - node.offsetWidth / 2}px`;
+            node.style.top = `${e.clientY - rect.top - node.offsetHeight / 2}px`;
+            drawConnections();
+        }); const index = e.dataTransfer.getData('text/plain');
+            const node = nodes[index];
+            const rect = canvas.getBoundingClientRect();
+            node.style.left = `${e.clientX - rect.left - node.offsetWidth / 2}px`;
+            node.style.top = `${e.clientY - rect.top - node.offsetHeight / 2}px`;
+            drawConnections();
+        });
+
+        // Save and load functionality (optional, not implemented yet)
+        function saveFlow() {
+            // Code to save the current flow data
+            alert('Save functionality is not implemented yet.');
+        }
+
+        function loadFlow() {
+            // Code to load saved flow data
+            alert('Load functionality is not implemented yet.');
+        }
+
+        // Add the draggable add node button to create connections
+        addNodeBtn.draggable = true;
+        addNodeBtn.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', 'addNode');
+        });
+        addNodeBtn.addEventListener('dragend', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const elementsAtPoint = document.elementsFromPoint(e.clientX, e.clientY);
+            const targetNode = elementsAtPoint.find(el => el.classList && el.classList.contains('node'));
+            if (targetNode) {
+                // Create a new node and connect it to the target node
+                const newNode = document.createElement('div');
+                newNode.className = 'node';
+                newNode.dataset.type = 'New Node';
+                newNode.textContent = 'New Node';
+                newNode.style.left = `${x}px`;
+                newNode.style.top = `${y}px`;
+                newNode.draggable = true;
+                newNode.addEventListener('dragstart', (e) => dragStart(e, newNode));
+                newNode.addEventListener('dragend', dragEnd);
+                newNode.addEventListener('click', () => openEditor(newNode));
+                canvas.appendChild(newNode);
+                nodes.push(newNode);
+                connectNodes(targetNode, newNode);
+            }
+        });
+
+        // Double-click to connect nodes sequentially
+        let connectMode = false;
+        let lastClickedNode = null;
+        canvas.addEventListener('dblclick', (e) => {
+            const node = e.target.closest('.node');
+            if (!node) return;
+            if (!connectMode) {
+                connectMode = true;
+                lastClickedNode = node;
+                alert('Connect mode: Double-click another node to connect.');
+            } else {
+                connectMode = false;
+                connectNodes(lastClickedNode, node);
+                alert('Nodes connected!');
+            }
+        });
+
+        // Enable editing on double-click of node
+        canvas.addEventListener('click', (e) => {
+            if (e.detail === 1) return; // Only handle double-click for editing
+            const node = e.target.closest('.node');
+            if (node) {
+                openEditor(node);
+            }
+        });
+
+        // Auto-save to local storage on unload
+        window.addEventListener('beforeunload', () => {
+            // Save the state of nodes and connections
+            const flowData = {
+                nodes: nodes.map(node => ({
+                    type: node.dataset.type,
+                    text: node.textContent,
+                    left: node.style.left,
+                    top: node.style.top,
+                })),
+                connections: connections.map(conn => ({
+                    from: nodes.indexOf(conn.from),
+                    to: nodes.indexOf(conn.to),
+                })),
+            };
+            localStorage.setItem('flowData', JSON.stringify(flowData));
+        });
+
+        // Load saved flow on page load
+        window.addEventListener('load', () => {
+            const savedFlow = localStorage.getItem('flowData');
+            if (savedFlow) {
+                const flowData = JSON.parse(savedFlow);
+                flowData.nodes.forEach(data => {
+                    const node = document.createElement('div');
+                    node.className = 'node';
+                    node.dataset.type = data.type;
+                    node.textContent = data.text;
+                    node.style.left = data.left;
+                    node.style.top = data.top;
+                    node.draggable = true;
+                    node.addEventListener('dragstart', (e) => dragStart(e, node));
+                    node.addEventListener('dragend', dragEnd);
+                    node.addEventListener('click', () => openEditor(node));
+                    canvas.appendChild(node);
+                    nodes.push(node);
+                });
+                flowData.connections.forEach(conn => {
+                    connectNodes(nodes[conn.from], nodes[conn.to]);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
